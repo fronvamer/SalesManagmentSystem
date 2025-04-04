@@ -5,63 +5,96 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SalesManagmentSystem"
         mc:Ignorable="d"
-      Title="Управление Товарами" Height="600" Width="800">
-    <Grid>
+        Title="Управление Товарами" Height="900" Width="800" Background="#F5F5F5">
+
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Background" Value="#2196F3"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="0,0,0,10"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="BorderBrush" Value="#BDBDBD"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="White"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Margin" Value="0,0,0,10"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="BorderBrush" Value="#BDBDBD"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="0,5,0,2"/>
+        </Style>
+        <Style TargetType="TabControl">
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="0,0,0,-42">
         <TabControl>
-            <!-- Вкладка для управления товарами -->
+            <!-- Товары -->
             <TabItem Header="Товары">
-                <StackPanel Margin="10">
-                    <Label Content="Код:"/>
-                    <TextBox x:Name="txtCode" Margin="0,0,0,10"/>
+                <ScrollViewer>
+                    <StackPanel Margin="10">
+                        <Label Content="Код:"/>
+                        <TextBox x:Name="txtCode"/>
 
-                    <Label Content="Наименование:"/>
-                    <TextBox x:Name="txtName" Margin="0,0,0,10"/>
+                        <Label Content="Наименование:"/>
+                        <TextBox x:Name="txtName"/>
 
-                    <Label Content="Бренд:"/>
-                    <TextBox x:Name="txtBrand" Margin="0,0,0,10"/>
+                        <Label Content="Бренд:"/>
+                        <TextBox x:Name="txtBrand"/>
 
-                    <Label Content="Категория:"/>
-                    <TextBox x:Name="txtCategory" Margin="0,0,0,10"/>
+                        <Label Content="Категория:"/>
+                        <TextBox x:Name="txtCategory"/>
 
-                    <Label Content="Цена:"/>
-                    <TextBox x:Name="txtPrice" Margin="0,0,0,10"/>
+                        <Label Content="Цена:"/>
+                        <TextBox x:Name="txtPrice"/>
 
-                    <Label Content="Изображение:"/>
-                    <StackPanel Orientation="Horizontal">
-                        <Button Content="Загрузить" Width="100" Click="btnLoadImage_Click"/>
-                        <Image x:Name="imgProduct" Width="100" Height="100" Margin="10,0,0,0"/>
+                        <Label Content="Изображение:"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Загрузить" Width="100" Click="btnLoadImage_Click"/>
+                            <Image x:Name="imgProduct" Width="100" Height="100" Margin="10,0,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                            <Button Content="Добавить" Width="100" Click="btnAdd_Click"/>
+                            <Button Content="Загрузить" Width="100" Click="btnLoad_Click"/>
+                        </StackPanel>
+
+                        <DataGrid x:Name="gridProducts" AutoGenerateColumns="False" Margin="0,20,0,0">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Код" Binding="{Binding Code}"/>
+                                <DataGridTextColumn Header="Наименование" Binding="{Binding Name}"/>
+                                <DataGridTextColumn Header="Бренд" Binding="{Binding Brand}"/>
+                                <DataGridTextColumn Header="Категория" Binding="{Binding Category}"/>
+                                <DataGridTextColumn Header="Цена" Binding="{Binding RetailPrice}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
                     </StackPanel>
-
-                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                        <Button Content="Добавить" Width="100" Click="btnAdd_Click"/>
-                        <Button Content="Загрузить" Width="100" Click="btnLoad_Click"/>
-                    </StackPanel>
-
-                    <DataGrid x:Name="gridProducts" AutoGenerateColumns="False" Margin="0,20,0,0">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Код" Binding="{Binding Code}"/>
-                            <DataGridTextColumn Header="Наименование" Binding="{Binding Name}"/>
-                            <DataGridTextColumn Header="Бренд" Binding="{Binding Brand}"/>
-                            <DataGridTextColumn Header="Категория" Binding="{Binding Category}"/>
-                            <DataGridTextColumn Header="Цена" Binding="{Binding RetailPrice}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </StackPanel>
+                </ScrollViewer>
             </TabItem>
 
-            <!-- Вкладка для управления магазинами -->
+            <!-- Магазины -->
             <TabItem Header="Магазины">
                 <StackPanel Margin="10">
                     <Label Content="Код:"/>
-                    <TextBox x:Name="txtStoreCode" Margin="0,0,0,10"/>
+                    <TextBox x:Name="txtStoreCode"/>
 
                     <Label Content="Наименование:"/>
-                    <TextBox x:Name="txtStoreName" Margin="0,0,0,10"/>
+                    <TextBox x:Name="txtStoreName"/>
 
                     <Label Content="Адрес:"/>
-                    <TextBox x:Name="txtStoreAddress" Margin="0,0,0,10"/>
+                    <TextBox x:Name="txtStoreAddress"/>
 
-                    <Button Content="Добавить Магазин" Click="btnAddStore_Click" Margin="0,10,0,0"/>
+                    <Button Content="Добавить Магазин" Click="btnAddStore_Click"/>
                     <DataGrid x:Name="gridStores" AutoGenerateColumns="False" Margin="0,20,0,0">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Код" Binding="{Binding StoreID}"/>
@@ -72,19 +105,19 @@
                 </StackPanel>
             </TabItem>
 
-            <!-- Вкладка для управления поставщиками -->
+            <!-- Поставщики -->
             <TabItem Header="Поставщики">
                 <StackPanel Margin="10">
                     <Label Content="Код:"/>
-                    <TextBox x:Name="txtSupplierCode" Margin="0,0,0,10"/>
+                    <TextBox x:Name="txtSupplierCode"/>
 
                     <Label Content="Наименование:"/>
-                    <TextBox x:Name="txtSupplierName" Margin="0,0,0,10"/>
+                    <TextBox x:Name="txtSupplierName"/>
 
                     <Label Content="Контактная информация:"/>
-                    <TextBox x:Name="txtSupplierContact" Margin="0,0,0,10"/>
+                    <TextBox x:Name="txtSupplierContact"/>
 
-                    <Button Content="Добавить Поставщика" Click="btnAddSupplier_Click" Margin="0,10,0,0"/>
+                    <Button Content="Добавить Поставщика" Click="btnAddSupplier_Click"/>
                     <DataGrid x:Name="gridSuppliers" AutoGenerateColumns="False" Margin="0,20,0,0">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Код" Binding="{Binding SupplierID}"/>
@@ -95,19 +128,19 @@
                 </StackPanel>
             </TabItem>
 
-            <!-- Вкладка для управления сотрудниками -->
+            <!-- Сотрудники -->
             <TabItem Header="Сотрудники">
                 <StackPanel Margin="10">
                     <Label Content="ФИО:"/>
-                    <TextBox x:Name="txtEmployeeName" Margin="0,0,0,10"/>
+                    <TextBox x:Name="txtEmployeeName"/>
 
                     <Label Content="Должность:"/>
-                    <TextBox x:Name="txtEmployeePosition" Margin="0,0,0,10"/>
+                    <TextBox x:Name="txtEmployeePosition"/>
 
                     <Label Content="Магазин (Код):"/>
-                    <TextBox x:Name="txtStoreID" Margin="0,0,0,10"/>
+                    <TextBox x:Name="txtStoreID"/>
 
-                    <Button Content="Добавить Сотрудника" Click="btnAddEmployee_Click" Margin="0,10,0,0"/>
+                    <Button Content="Добавить Сотрудника" Click="btnAddEmployee_Click"/>
                     <DataGrid x:Name="gridEmployees" AutoGenerateColumns="False" Margin="0,20,0,0">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ФИО" Binding="{Binding FullName}"/>
@@ -117,19 +150,20 @@
                     </DataGrid>
                 </StackPanel>
             </TabItem>
+
+            <!-- Продажи -->
             <TabItem Header="Продажи">
                 <StackPanel Margin="10">
                     <Label Content="Клиент:"/>
-                    <ComboBox x:Name="cmbCustomer" Margin="0,0,0,10" SelectionChanged="cmbCustomer_SelectionChanged"/>
+                    <ComboBox x:Name="cmbCustomer" SelectionChanged="cmbCustomer_SelectionChanged"/>
 
                     <Label Content="Магазин:"/>
-                    <ComboBox x:Name="cmbStore" Margin="0,0,0,10"/>
+                    <ComboBox x:Name="cmbStore"/>
 
                     <Label Content="Сотрудник:"/>
-                    <ComboBox x:Name="cmbEmployee" Margin="0,0,0,10"/>
+                    <ComboBox x:Name="cmbEmployee"/>
 
                     <Label Content="Товары:"/>
-
                     <DataGrid x:Name="gridSaleItems" AutoGenerateColumns="False" Margin="0,20,0,0" Height="128">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Код" Binding="{Binding Code}"/>
@@ -141,12 +175,11 @@
                     </DataGrid>
 
                     <Label Content="Итого:"/>
-                    <TextBox x:Name="txtTotalAmount" IsReadOnly="True" RenderTransformOrigin="0.501,3.423"/>
+                    <TextBox x:Name="txtTotalAmount" IsReadOnly="True"/>
                     <Button Content="Добавить Продажу" Click="btnAddSale_Click"/>
                 </StackPanel>
             </TabItem>
 
         </TabControl>
-
     </Grid>
 </Window>
