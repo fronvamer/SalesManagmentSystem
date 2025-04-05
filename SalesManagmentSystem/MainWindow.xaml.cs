@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace SalesManagmentSystem
@@ -319,6 +321,73 @@ namespace SalesManagmentSystem
                 gridSalesReport.ItemsSource = reportData;
             }
         }
+        private void btnGenerateComparisonReport_Click(object sender, RoutedEventArgs e)
+        {
+            DateTime startDate1 = dpStartDate1.SelectedDate ?? DateTime.Now;
+            DateTime endDate1 = dpEndDate1.SelectedDate ?? DateTime.Now;
+            DateTime startDate2 = dpStartDate2.SelectedDate ?? DateTime.Now;
+            DateTime endDate2 = dpEndDate2.SelectedDate ?? DateTime.Now;
+
+            using (var context = new ModelStore())
+            {
+                var reportData = (from sale in context.Sales
+                                  where (sale.SaleDate >= startDate1 && sale.SaleDate <= endDate1) ||
+                                        (sale.SaleDate >= startDate2 && sale.SaleDate <= endDate2)
+                                  join saleItem in context.SaleItems on sale.SaleID equals saleItem.SaleID
+                                  join product in context.Products on saleItem.ProductID equals product.ProductID
+                                  group saleItem by product.Name into g
+                                  select new
+                                  {
+                                      ProductName = g.Key,
+                                      SalesPeriod1 = g.Where(x => x.Sales.SaleDate >= startDate1 && x.Sales.SaleDate <= endDate1).Sum(x => x.Quantity),
+                                      SalesPeriod2 = g.Where(x => x.Sales.SaleDate >= startDate2 && x.Sales.SaleDate <= endDate2).Sum(x => x.Quantity)
+                                  }).ToList();
+
+                gridComparisonReport.ItemsSource = reportData;
+            }
+        }
+
+        private void gridComparisonReport_Loaded(object sender, RoutedEventArgs e)
+        {
+            foreach (var item in gridComparisonReport.Items)
+            {
+                var row = gridComparisonReport.ItemContainerGenerator.ContainerFromItem(item) as DataGridRow;
+                if (row != null)
+                {
+                    var dataRow = (dynamic)item; // Приводим к динамическому для доступа к свойствам
+                    if (dataRow.SalesPeriod1 > dataRow.SalesPeriod2)
+                    {
+                        row.Background = new SolidColorBrush(Colors.Red);
+                    }
+                    else if (dataRow.SalesPeriod1 < dataRow.SalesPeriod2)
+                    {
+                        row.Background = new SolidColorBrush(Colors.Green);
+                    }
+                }
+            }
+        }
+
+
+        private void HighlightRows()
+        {
+            foreach (var item in gridComparisonReport.Items)
+            {
+                var row = gridComparisonReport.ItemContainerGenerator.ContainerFromItem(item) as DataGridRow;
+                if (row != null) // Убедитесь, что строка существует
+                {
+                    var dataRow = (dynamic)item; // Приводим к динамическому для доступа к свойствам
+                    if (dataRow.SalesPeriod1 > dataRow.SalesPeriod2)
+                    {
+                        row.Background = new SolidColorBrush(Colors.Red);
+                    }
+                    else if (dataRow.SalesPeriod1 < dataRow.SalesPeriod2)
+                    {
+                        row.Background = new SolidColorBrush(Colors.Green);
+                    }
+                }
+            }
+        }
+
 
 
 

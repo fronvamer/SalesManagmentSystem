@@ -182,6 +182,7 @@
                     <Button Content="Добавить Продажу" Click="btnAddSale_Click"/>
                 </StackPanel>
             </TabItem>
+            
             <TabItem Header="Отчет о продажах">
                 <StackPanel Margin="10">
                     <Label Content="Период отчета:"/>
@@ -204,7 +205,39 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </StackPanel>
+               
             </TabItem>
+            <TabItem Header="Сравнение продаж">
+                <StackPanel Margin="10">
+                    <Label Content="Выберите период 1:"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="С:"/>
+                        <DatePicker x:Name="dpStartDate1" Margin="5"/>
+                        <Label Content="По:"/>
+                        <DatePicker x:Name="dpEndDate1" Margin="5"/>
+                    </StackPanel>
+
+                    <Label Content="Выберите период 2:"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="С:"/>
+                        <DatePicker x:Name="dpStartDate2" Margin="5"/>
+                        <Label Content="По:"/>
+                        <DatePicker x:Name="dpEndDate2" Margin="5"/>
+                    </StackPanel>
+
+                    <Button Content="Сформировать отчет" Click="btnGenerateComparisonReport_Click" Margin="0,10,0,0"/>
+
+                    <DataGrid x:Name="gridComparisonReport" AutoGenerateColumns="False" Margin="0,20,0,0" Loaded="gridComparisonReport_Loaded">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Товар" Binding="{Binding ProductName}"/>
+                            <DataGridTextColumn Header="Продажи за Период 1" Binding="{Binding SalesPeriod1}"/>
+                            <DataGridTextColumn Header="Продажи за Период 2" Binding="{Binding SalesPeriod2}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
+
+
             <TabItem Header="Отчет о движении товаров">
                 <StackPanel Margin="10">
                     <Label Content="Период отчета:"/>
@@ -214,7 +247,7 @@
                         <Label Content="По:"/>
                         <DatePicker x:Name="dpMovementEndDate" Margin="5"/>
                     </StackPanel>
-                    <Button Content="Сформировать отчет" Click="btnGenerateMovementReport_Click" Margin="0,10,0,0"/>
+                    <Button Content="Сформировать отчет" Click="btnGenerateComparisonReport_Click" Margin="0,10,0,0"/>
 
                     <DataGrid x:Name="gridMovementReport" AutoGenerateColumns="False" Margin="0,20,0,0">
                         <DataGrid.Columns>
