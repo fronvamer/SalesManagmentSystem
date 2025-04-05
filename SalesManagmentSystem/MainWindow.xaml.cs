@@ -11,6 +11,8 @@ namespace SalesManagmentSystem
     public partial class MainWindow : Window
     {
         private string imagePath = string.Empty; // Для хранения пути к загруженному изображению
+        private decimal totalAmount = 0m;
+        private List<SaleItems> saleItems = new List<SaleItems>();
 
         public MainWindow()
         {
@@ -21,26 +23,77 @@ namespace SalesManagmentSystem
             LoadEmployees();
             LoadCustomers();
             LoadStoresForSales(); // Загрузка магазинов для вкладки Продажи
+            LoadProductsForSales(); // Метод для загрузки товаров
             LoadEmployeesForSales(); // Загрузка сотрудников для вкладки Продажи
         }
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        private void LoadProductsForSales()
         {
-        
+            using (var context = new ModelStore())
+            {
+                var products = context.Products.ToList();
+                cmbProducts.ItemsSource = products;
+                cmbProducts.DisplayMemberPath = "Name"; // Убедитесь, что поле "Name" существует в классе Products
+                cmbProducts.SelectedValuePath = "ProductID"; // Убедитесь, что поле "ProductID" существует в классе Products
+            }
         }
+        private void cmbProducts_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            //if (cmbProducts.SelectedItem is Products selectedProduct)
+            //{
+            //    // Здесь вы можете обработать выбор товара, например, показать его детали
+            //    MessageBox.Show($"Выбран товар: {selectedProduct.Name}, Цена: {selectedProduct.RetailPrice}");
+            //}
+        }
+
+        private void btnAddProduct_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedProduct = (Products)cmbProducts.SelectedItem;
+
+            if (selectedProduct != null)
+            {
+                var saleItem = new SaleItems
+                {
+                    ProductID = selectedProduct.ProductID,
+                    Quantity = 1, // Здесь можно добавить ввод для количества
+                    SalePrice = selectedProduct.RetailPrice // Используем цену из базы данных
+                };
+
+                saleItems.Add(saleItem);
+                gridSaleItems.ItemsSource = null; // Сброс значений для обновления
+                gridSaleItems.ItemsSource = saleItems; // Обновляем список
+                CalculateTotalAmount();
+            }
+        }
+
         private void btnAddSale_Click(object sender, RoutedEventArgs e)
         {
+            totalAmount = CalculateTotalAmount();
             var sale = new Sales
             {
                 CustomerID = (int)cmbCustomer.SelectedValue,
                 StoreID = (int)cmbStore.SelectedValue,
                 EmployeeID = (int)cmbEmployee.SelectedValue,
                 SaleDate = DateTime.Now,
-                TotalAmount = CalculateTotalAmount() // Предположим, есть метод для расчета
+                TotalAmount = totalAmount // Используем ранее посчитанную сумму
             };
 
             using (var context = new ModelStore())
             {
                 context.Sales.Add(sale);
+                context.SaveChanges();
+
+                // Добавляем элементы продажи
+                foreach (var item in saleItems)
+                {
+                    var saleItem = new SaleItems
+                    {
+                        SaleID = sale.SaleID, // связываем с новой продажей
+                        ProductID = item.ProductID,
+                        Quantity = item.Quantity,
+                        SalePrice = item.SalePrice
+                    };
+                    context.SaleItems.Add(saleItem);
+                }
                 context.SaveChanges();
             }
 
