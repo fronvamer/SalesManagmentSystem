@@ -236,6 +236,25 @@
                     </DataGrid>
                 </StackPanel>
             </TabItem>
+            <TabItem Header="Поиск товаров с максимальной прибылью">
+                <StackPanel Margin="10">
+                    <Label Content="Период поиска:"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="С:"/>
+                        <DatePicker x:Name="dpSearchStartDate" Margin="5"/>
+                        <Label Content="По:"/>
+                        <DatePicker x:Name="dpSearchEndDate" Margin="5"/>
+                    </StackPanel>
+                    <Button Content="Поиск" Click="btnSearch_Click" Margin="0,10,0,0"/>
+
+                    <DataGrid x:Name="gridSearchResults" AutoGenerateColumns="False" Margin="0,20,0,0">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Товар" Binding="{Binding ProductName}"/>
+                            <DataGridTextColumn Header="Прибыль" Binding="{Binding Profit}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
 
 
             <TabItem Header="Отчет о движении товаров">

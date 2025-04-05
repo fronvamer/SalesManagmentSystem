@@ -47,25 +47,7 @@ namespace SalesManagmentSystem
             //}
         }
 
-        private void btnAddProduct_Click(object sender, RoutedEventArgs e)
-        {
-            var selectedProduct = (Products)cmbProducts.SelectedItem;
-
-            if (selectedProduct != null)
-            {
-                var saleItem = new SaleItems
-                {
-                    ProductID = selectedProduct.ProductID,
-                    Quantity = 1,
-                    SalePrice = selectedProduct.RetailPrice 
-                };
-
-                saleItems.Add(saleItem);
-                gridSaleItems.ItemsSource = null;
-                gridSaleItems.ItemsSource = saleItems; 
-                CalculateTotalAmount();
-            }
-        }
+      
 
         private void btnAddSale_Click(object sender, RoutedEventArgs e)
         {
@@ -150,13 +132,14 @@ namespace SalesManagmentSystem
             {
                 foreach (var item in saleItemsList)
                 {
-                    total += item.Quantity * item.SalePrice;
+                    total += item.Quantity * item.SalePrice; // Учитываем наценку в расчетах
                 }
             }
 
             txtTotalAmount.Text = total.ToString("C");
             return total;
         }
+
         private void btnLoadImage_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new OpenFileDialog();
@@ -387,9 +370,77 @@ namespace SalesManagmentSystem
                 }
             }
         }
+        private void btnSearch_Click(object sender, RoutedEventArgs e)
+        {
+            DateTime startDate = dpSearchStartDate.SelectedDate ?? DateTime.Now;
+            DateTime endDate = dpSearchEndDate.SelectedDate ?? DateTime.Now;
+
+            using (var context = new ModelStore())
+            {
+                var results = (from sale in context.Sales
+                               where sale.SaleDate >= startDate && sale.SaleDate <= endDate
+                               join saleItem in context.SaleItems on sale.SaleID equals saleItem.SaleID
+                               join product in context.Products on saleItem.ProductID equals product.ProductID
+                               group new { saleItem, product } by product.Name into g
+                               let profit = g.Sum(x => (x.saleItem.SalePrice - x.product.RetailPrice) * x.saleItem.Quantity)
+                               orderby profit descending
+                               select new
+                               {
+                                   ProductName = g.Key,
+                                   Profit = profit
+                               }).ToList();
+
+                gridSearchResults.ItemsSource = results;
+            }
+        }
 
 
+        private void btnAddProduct_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedProduct = (Products)cmbProducts.SelectedItem;
 
+            if (selectedProduct != null)
+            {
+                decimal markupPercentage;
+
+
+                switch (selectedProduct.Brand)
+                {
+                    case "Apple":
+                        markupPercentage = 0.15m;
+                        break;
+                    case "Lenovo":
+                        markupPercentage = 0.10m;
+                        break;
+                    case "Samsung":
+                        markupPercentage = 0.05m;
+                        break;
+                    case "LG":
+                        markupPercentage = 0.02m;
+                        break;
+                    case "Panasonic":
+                        markupPercentage = 0.07m;
+                        break;
+                    default:
+                        markupPercentage = 0.00m;
+                        break;
+                }
+
+                decimal salePriceWithMarkup = selectedProduct.RetailPrice * (1 + markupPercentage);
+
+                var saleItem = new SaleItems
+                {
+                    ProductID = selectedProduct.ProductID,
+                    Quantity = 1,
+                    SalePrice = salePriceWithMarkup
+                };
+
+                saleItems.Add(saleItem);
+                gridSaleItems.ItemsSource = null;
+                gridSaleItems.ItemsSource = saleItems;
+                CalculateTotalAmount();
+            }
+        }
 
         private void cmbCustomer_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
