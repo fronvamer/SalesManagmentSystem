@@ -15,7 +15,7 @@ namespace SalesManagmentSystem
         private string imagePath = string.Empty; 
         private decimal totalAmount = 0m;
         private List<SaleItems> saleItems = new List<SaleItems>();
-        private Warehouses selectedWarehouse; // Объявляем переменную здесь
+        private Warehouses selectedWarehouse; 
 
         public MainWindow()
         {
