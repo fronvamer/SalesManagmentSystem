@@ -1,4 +1,4 @@
-﻿using Microsoft.Win32; // Для OpenFileDialog
+﻿using Microsoft.Win32; 
 using SalesManagmentSystem.Models.Store;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ namespace SalesManagmentSystem
 {
     public partial class MainWindow : Window
     {
-        private string imagePath = string.Empty; // Для хранения пути к загруженному изображению
+        private string imagePath = string.Empty; 
         private decimal totalAmount = 0m;
         private List<SaleItems> saleItems = new List<SaleItems>();
 
@@ -22,9 +22,9 @@ namespace SalesManagmentSystem
             LoadSuppliers();
             LoadEmployees();
             LoadCustomers();
-            LoadStoresForSales(); // Загрузка магазинов для вкладки Продажи
-            LoadProductsForSales(); // Метод для загрузки товаров
-            LoadEmployeesForSales(); // Загрузка сотрудников для вкладки Продажи
+            LoadStoresForSales(); 
+            LoadProductsForSales(); 
+            LoadEmployeesForSales(); 
         }
         private void LoadProductsForSales()
         {
@@ -32,15 +32,15 @@ namespace SalesManagmentSystem
             {
                 var products = context.Products.ToList();
                 cmbProducts.ItemsSource = products;
-                cmbProducts.DisplayMemberPath = "Name"; // Убедитесь, что поле "Name" существует в классе Products
-                cmbProducts.SelectedValuePath = "ProductID"; // Убедитесь, что поле "ProductID" существует в классе Products
+                cmbProducts.DisplayMemberPath = "Name"; 
+                cmbProducts.SelectedValuePath = "ProductID"; 
             }
         }
         private void cmbProducts_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             //if (cmbProducts.SelectedItem is Products selectedProduct)
             //{
-            //    // Здесь вы можете обработать выбор товара, например, показать его детали
+            //    
             //    MessageBox.Show($"Выбран товар: {selectedProduct.Name}, Цена: {selectedProduct.RetailPrice}");
             //}
         }
@@ -54,13 +54,13 @@ namespace SalesManagmentSystem
                 var saleItem = new SaleItems
                 {
                     ProductID = selectedProduct.ProductID,
-                    Quantity = 1, // Здесь можно добавить ввод для количества
-                    SalePrice = selectedProduct.RetailPrice // Используем цену из базы данных
+                    Quantity = 1,
+                    SalePrice = selectedProduct.RetailPrice 
                 };
 
                 saleItems.Add(saleItem);
-                gridSaleItems.ItemsSource = null; // Сброс значений для обновления
-                gridSaleItems.ItemsSource = saleItems; // Обновляем список
+                gridSaleItems.ItemsSource = null;
+                gridSaleItems.ItemsSource = saleItems; 
                 CalculateTotalAmount();
             }
         }
@@ -74,7 +74,7 @@ namespace SalesManagmentSystem
                 StoreID = (int)cmbStore.SelectedValue,
                 EmployeeID = (int)cmbEmployee.SelectedValue,
                 SaleDate = DateTime.Now,
-                TotalAmount = totalAmount // Используем ранее посчитанную сумму
+                TotalAmount = totalAmount
             };
 
             using (var context = new ModelStore())
@@ -82,7 +82,7 @@ namespace SalesManagmentSystem
                 context.Sales.Add(sale);
                 context.SaveChanges();
 
-                // Добавляем элементы продажи
+                // Добавляем элементы продажи и уменьшаем количество на складе
                 foreach (var item in saleItems)
                 {
                     var saleItem = new SaleItems
@@ -93,20 +93,36 @@ namespace SalesManagmentSystem
                         SalePrice = item.SalePrice
                     };
                     context.SaleItems.Add(saleItem);
+
+                    // Уменьшаем количество товара на складе
+                    var warehouseItem = context.Warehouses.FirstOrDefault(w => w.StoreID == sale.StoreID && w.ProductID == item.ProductID);
+                    if (warehouseItem != null && warehouseItem.Quantity >= item.Quantity)
+                    {
+                        warehouseItem.Quantity -= item.Quantity;
+                        // Сохраняем изменения в складе
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Недостаточное количество товара на складе!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return; // Прерываем добавление продажи
+                    }
                 }
+
                 context.SaveChanges();
             }
 
             MessageBox.Show("Продажа добавлена!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+
         private void LoadStoresForSales()
         {
             using (var context = new ModelStore())
             {
                 var stores = context.Stores.ToList();
                 cmbStore.ItemsSource = stores;
-                cmbStore.DisplayMemberPath = "Name"; // Убедитесь, что поле "Name" существует в классе Stores
-                cmbStore.SelectedValuePath = "StoreID"; // Убедитесь, что поле "StoreID" существует в классе Stores
+                cmbStore.DisplayMemberPath = "Name"; 
+                cmbStore.SelectedValuePath = "StoreID"; 
             }
         }
 
@@ -118,8 +134,8 @@ namespace SalesManagmentSystem
             {
                 var employees = context.Employees.ToList();
                 cmbEmployee.ItemsSource = employees;
-                cmbEmployee.DisplayMemberPath = "FullName"; // Убедитесь, что поле "FullName" существует в классе Employees
-                cmbEmployee.SelectedValuePath = "EmployeeID"; // Убедитесь, что поле "EmployeeID" существует в классе Employees
+                cmbEmployee.DisplayMemberPath = "FullName"; 
+                cmbEmployee.SelectedValuePath = "EmployeeID"; 
             }
         }
 
@@ -160,7 +176,7 @@ namespace SalesManagmentSystem
                 Brand = txtBrand.Text,
                 Category = txtCategory.Text,
                 RetailPrice = decimal.Parse(txtPrice.Text),
-                Image = imagePath // Сохраняем путь к изображению
+                Image = imagePath 
             };
 
             using (var context = new ModelStore())
@@ -219,8 +235,8 @@ namespace SalesManagmentSystem
             {
                 var customers = context.Customers.ToList();
                 cmbCustomer.ItemsSource = customers;
-                cmbCustomer.DisplayMemberPath = "Name"; // Убедитесь, что поле "Name" существует в классе Customers
-                cmbCustomer.SelectedValuePath = "CustomerID"; // Убедитесь, что поле "CustomerID" существует в классе Customers
+                cmbCustomer.DisplayMemberPath = "Name"; 
+                cmbCustomer.SelectedValuePath = "CustomerID"; 
             }
         }
         private void LoadEmployees()
@@ -277,7 +293,34 @@ namespace SalesManagmentSystem
             LoadEmployees();
         }
 
-       
+        private void btnGenerateReport_Click(object sender, RoutedEventArgs e)
+        {
+            DateTime startDate = dpStartDate.SelectedDate ?? DateTime.Now;
+            DateTime endDate = dpEndDate.SelectedDate ?? DateTime.Now;
+
+            using (var context = new ModelStore())
+            {
+                var reportData = (from sale in context.Sales
+                                  where sale.SaleDate >= startDate && sale.SaleDate <= endDate
+                                  join store in context.Stores on sale.StoreID equals store.StoreID
+                                  join employee in context.Employees on sale.EmployeeID equals employee.EmployeeID
+                                  join saleItem in context.SaleItems on sale.SaleID equals saleItem.SaleID
+                                  join product in context.Products on saleItem.ProductID equals product.ProductID
+                                  select new
+                                  {
+                                      SaleDate = sale.SaleDate,
+                                      StoreName = store.Name,
+                                      EmployeeName = employee.FullName,
+                                      ProductName = product.Name,
+                                      Quantity = saleItem.Quantity,
+                                      TotalAmount = saleItem.SalePrice * saleItem.Quantity
+                                  }).ToList();
+
+                gridSalesReport.ItemsSource = reportData;
+            }
+        }
+
+
 
         private void cmbCustomer_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {

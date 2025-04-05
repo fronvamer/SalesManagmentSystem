@@ -182,7 +182,52 @@
                     <Button Content="Добавить Продажу" Click="btnAddSale_Click"/>
                 </StackPanel>
             </TabItem>
+            <TabItem Header="Отчет о продажах">
+                <StackPanel Margin="10">
+                    <Label Content="Период отчета:"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="С:"/>
+                        <DatePicker x:Name="dpStartDate" Margin="5"/>
+                        <Label Content="По:"/>
+                        <DatePicker x:Name="dpEndDate" Margin="5"/>
+                    </StackPanel>
+                    <Button Content="Сформировать отчет" Click="btnGenerateReport_Click" Margin="0,10,0,0"/>
 
+                    <DataGrid x:Name="gridSalesReport" AutoGenerateColumns="False" Margin="0,20,0,0">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Дата" Binding="{Binding SaleDate}"/>
+                            <DataGridTextColumn Header="Магазин" Binding="{Binding StoreName}"/>
+                            <DataGridTextColumn Header="Сотрудник" Binding="{Binding EmployeeName}"/>
+                            <DataGridTextColumn Header="Товар" Binding="{Binding ProductName}"/>
+                            <DataGridTextColumn Header="Количество" Binding="{Binding Quantity}"/>
+                            <DataGridTextColumn Header="Сумма" Binding="{Binding TotalAmount}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Отчет о движении товаров">
+                <StackPanel Margin="10">
+                    <Label Content="Период отчета:"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="С:"/>
+                        <DatePicker x:Name="dpMovementStartDate" Margin="5"/>
+                        <Label Content="По:"/>
+                        <DatePicker x:Name="dpMovementEndDate" Margin="5"/>
+                    </StackPanel>
+                    <Button Content="Сформировать отчет" Click="btnGenerateMovementReport_Click" Margin="0,10,0,0"/>
+
+                    <DataGrid x:Name="gridMovementReport" AutoGenerateColumns="False" Margin="0,20,0,0">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Склад" Binding="{Binding StoreName}"/>
+                            <DataGridTextColumn Header="Товар" Binding="{Binding ProductName}"/>
+                            <DataGridTextColumn Header="Начальный остаток" Binding="{Binding InitialQuantity}"/>
+                            <DataGridTextColumn Header="Приход" Binding="{Binding Incomes}"/>
+                            <DataGridTextColumn Header="Расход" Binding="{Binding Expenses}"/>
+                            <DataGridTextColumn Header="Конечный остаток" Binding="{Binding FinalQuantity}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
 
         </TabControl>
     </Grid>
