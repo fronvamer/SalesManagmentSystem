@@ -84,30 +84,30 @@ namespace SalesManagmentSystem
                 context.Sales.Add(sale);
                 context.SaveChanges();
 
-                // Добавляем элементы продажи и уменьшаем количество на складе
+
                 foreach (var item in saleItems)
                 {
                     var saleItem = new SaleItems
                     {
-                        SaleID = sale.SaleID, // связываем с новой продажей
+                        SaleID = sale.SaleID, 
                         ProductID = item.ProductID,
                         Quantity = item.Quantity,
                         SalePrice = item.SalePrice
                     };
                     context.SaleItems.Add(saleItem);
 
-                    // Уменьшаем количество товара на складе
+            
                     var warehouseItem = context.Warehouses.FirstOrDefault(w => w.StoreID == sale.StoreID && w.ProductID == item.ProductID);
                     if (warehouseItem != null && warehouseItem.Quantity >= item.Quantity)
                     {
                         warehouseItem.Quantity -= item.Quantity;
-                        // Сохраняем изменения в складе
+                       
                         context.SaveChanges();
                     }
                     else
                     {
                         MessageBox.Show("Недостаточное количество товара на складе!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        return; // Прерываем добавление продажи
+                        return; 
                     }
                 }
 
@@ -165,7 +165,7 @@ namespace SalesManagmentSystem
             if (dialog.ShowDialog() == true)
             {
                 imagePath = dialog.FileName;
-                imgProduct.Source = new BitmapImage(new Uri(imagePath)); // Отображаем изображение
+                imgProduct.Source = new BitmapImage(new Uri(imagePath)); 
             }
         }
 
@@ -354,7 +354,7 @@ namespace SalesManagmentSystem
                 var row = gridComparisonReport.ItemContainerGenerator.ContainerFromItem(item) as DataGridRow;
                 if (row != null)
                 {
-                    var dataRow = (dynamic)item; // Приводим к динамическому для доступа к свойствам
+                    var dataRow = (dynamic)item; 
                     if (dataRow.SalesPeriod1 > dataRow.SalesPeriod2)
                     {
                         row.Background = new SolidColorBrush(Colors.Red);
@@ -373,9 +373,9 @@ namespace SalesManagmentSystem
             foreach (var item in gridComparisonReport.Items)
             {
                 var row = gridComparisonReport.ItemContainerGenerator.ContainerFromItem(item) as DataGridRow;
-                if (row != null) // Убедитесь, что строка существует
+                if (row != null) 
                 {
-                    var dataRow = (dynamic)item; // Приводим к динамическому для доступа к свойствам
+                    var dataRow = (dynamic)item; 
                     if (dataRow.SalesPeriod1 > dataRow.SalesPeriod2)
                     {
                         row.Background = new SolidColorBrush(Colors.Red);

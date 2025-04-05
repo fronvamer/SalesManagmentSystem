@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "hx/GlAFltwa2iHrWt9cf3Ln2YrxH7xm+jV4HwzKKUGo=",
+  "Source": "SalesManagmentRestApi",
+  "BasePath": "_content/SalesManagmentRestApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

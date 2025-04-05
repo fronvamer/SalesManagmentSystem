@@ -5,6 +5,8 @@ VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalesManagmentSystem", "SalesManagmentSystem\SalesManagmentSystem.csproj", "{8C7BE0B9-4290-4FD3-9184-561B0A62E558}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalesManagmentRestApi", "SalesManagmentRestApi\SalesManagmentRestApi.csproj", "{FE88288B-73F4-4CF0-904C-BCC575037760}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{8C7BE0B9-4290-4FD3-9184-561B0A62E558}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C7BE0B9-4290-4FD3-9184-561B0A62E558}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C7BE0B9-4290-4FD3-9184-561B0A62E558}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE88288B-73F4-4CF0-904C-BCC575037760}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE88288B-73F4-4CF0-904C-BCC575037760}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE88288B-73F4-4CF0-904C-BCC575037760}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE88288B-73F4-4CF0-904C-BCC575037760}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

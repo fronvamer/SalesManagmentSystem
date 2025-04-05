@@ -43,3 +43,6 @@ C:\SalesManagmentSystem\SalesManagmentSystem\obj\Debug\SalesManagmentSystem.cspr
 C:\SalesManagmentSystem\SalesManagmentSystem\obj\Debug\SalesManagmentSystem.exe
 C:\SalesManagmentSystem\SalesManagmentSystem\obj\Debug\SalesManagmentSystem.pdb
 C:\SalesManagmentSystem\SalesManagmentSystem\obj\Debug\SalesManagmentSystem_Content.g.cs
+C:\SalesManagmentSystem\SalesManagmentSystem\bin\Debug\System.Configuration.ConfigurationManager.dll
+C:\SalesManagmentSystem\SalesManagmentSystem\bin\Debug\System.Configuration.ConfigurationManager.xml
+C:\SalesManagmentSystem\SalesManagmentSystem\bin\Debug\ru\EntityFramework.SqlServer.resources.dll
