@@ -42,6 +42,37 @@ public class OrdersController : ControllerBase
 
         return Ok(new { orderId = sale.SaleID, status = "Создан" });
     }
+
+    [HttpGet("order/{orderId}")]
+    public IActionResult GetOrderStatus(int orderId)
+    {
+        var order = _context.Sales.FirstOrDefault(s => s.SaleID == orderId);
+
+        if (order == null)
+        {
+            return NotFound("Заказ не найден.");
+        }
+
+
+        var saleItems = _context.SaleItems
+            .Where(si => si.SaleID == order.SaleID)
+            .ToList();
+
+        var status = new
+        {
+            orderId = order.SaleID,
+            status = "В процессе", 
+            deliveryDate = DateTime.Now.AddDays(3), 
+            items = saleItems.Select(si => new {
+                productId = si.ProductID,
+                quantity = si.Quantity
+            }).ToList()
+        };
+
+        return Ok(status);
+    }
+
+
 }
 
 public class CreateOrderRequest

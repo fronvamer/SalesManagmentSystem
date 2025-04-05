@@ -38,10 +38,10 @@
     </Window.Resources>
 
     <Grid Margin="0,0,0,-42">
-        <TabControl>
+        <TabControl Margin="10,10,10,59">
             <!-- Товары -->
             <TabItem Header="Товары">
-                <ScrollViewer>
+                <ScrollViewer Height="787">
                     <StackPanel Margin="10">
                         <Label Content="Код:"/>
                         <TextBox x:Name="txtCode"/>
@@ -66,7 +66,6 @@
 
                         <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                             <Button Content="Добавить" Width="100" Click="btnAdd_Click"/>
-                            <Button Content="Загрузить" Width="100" Click="btnLoad_Click"/>
                         </StackPanel>
 
                         <DataGrid x:Name="gridProducts" AutoGenerateColumns="False" Margin="0,20,0,0">
@@ -81,6 +80,7 @@
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
+           
 
             <!-- Магазины -->
             <TabItem Header="Магазины">
@@ -182,7 +182,29 @@
                     <Button Content="Добавить Продажу" Click="btnAddSale_Click"/>
                 </StackPanel>
             </TabItem>
-            
+            <TabItem Header="Подпитка Магазинов">
+                <StackPanel Margin="10">
+                    <Label Content="Основной склад:"/>
+                    <ComboBox x:Name="cmbMainWarehouse" Margin="0,0,0,10" SelectionChanged="cmbMainWarehouse_SelectionChanged"/>
+
+                    <DataGrid x:Name="gridWarehouseProducts" AutoGenerateColumns="False" Margin="0,10,0,0" Height="65">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Код" Binding="{Binding Code}"/>
+                            <DataGridTextColumn Header="Наименование" Binding="{Binding Name}"/>
+                            <DataGridTextColumn Header="Минимальное Количество" Binding="{Binding MinQuantity}"/>
+                            <DataGridTextColumn Header="Максимальное Количество" Binding="{Binding MaxQuantity}"/>
+                            <DataGridTextColumn Header="Текущий Остаток" Binding="{Binding CurrentQuantity}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                        <Label Content="Код Магазина:"/>
+                        <TextBox x:Name="txtStoreeCode" Width="100" Margin="5,0"/>
+                        <Button Content="Перевести" Click="btnTransferToStore_Click" Margin="5,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+
             <TabItem Header="Отчет о продажах">
                 <StackPanel Margin="10">
                     <Label Content="Период отчета:"/>
@@ -236,6 +258,10 @@
                     </DataGrid>
                 </StackPanel>
             </TabItem>
+            
+
+
+
             <TabItem Header="Поиск товаров с максимальной прибылью">
                 <StackPanel Margin="10">
                     <Label Content="Период поиска:"/>

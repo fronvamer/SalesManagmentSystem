@@ -21,7 +21,9 @@ namespace SalesManagmentSystem.Models.Store
 
         public int ProductID { get; set; }
 
-        public int Quantity { get; set; }
+        public int MinQuantity { get; set; }
+        public int MaxQuantity { get; set; }
+
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Inventory> Inventory { get; set; }

@@ -21,7 +21,7 @@ public class InventoryController : ControllerBase
             .Where(w => !storeId.HasValue || w.StoreID == storeId) 
             .Select(w => new
             {
-                store = w.Stores.Name, // Имя магазина
+                store = w.Stores.Name, 
                 products = _context.Inventory
                     .Where(i => i.WarehouseID == w.WarehouseID && (!productId.HasValue || i.ProductID == productId)) 
                     .Select(i => new

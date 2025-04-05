@@ -15,6 +15,7 @@ namespace SalesManagmentSystem
         private string imagePath = string.Empty; 
         private decimal totalAmount = 0m;
         private List<SaleItems> saleItems = new List<SaleItems>();
+        private Warehouses selectedWarehouse; // Объявляем переменную здесь
 
         public MainWindow()
         {
@@ -26,8 +27,21 @@ namespace SalesManagmentSystem
             LoadCustomers();
             LoadStoresForSales(); 
             LoadProductsForSales(); 
-            LoadEmployeesForSales(); 
+            LoadEmployeesForSales();
+            LoadMainWarehouses();
+            LoadWarehouseProducts();
         }
+        private void LoadMainWarehouses()
+        {
+            using (var context = new ModelStore())
+            {
+                var warehouses = context.Warehouses.ToList();
+                cmbMainWarehouse.ItemsSource = warehouses; 
+                cmbMainWarehouse.DisplayMemberPath = "Name"; 
+                cmbMainWarehouse.SelectedValuePath = "WarehouseID"; 
+            }
+        }
+
         private void LoadProductsForSales()
         {
             using (var context = new ModelStore())
@@ -80,9 +94,9 @@ namespace SalesManagmentSystem
 
             
                     var warehouseItem = context.Warehouses.FirstOrDefault(w => w.StoreID == sale.StoreID && w.ProductID == item.ProductID);
-                    if (warehouseItem != null && warehouseItem.Quantity >= item.Quantity)
+                    if (warehouseItem != null && warehouseItem.MinQuantity >= item.Quantity)
                     {
-                        warehouseItem.Quantity -= item.Quantity;
+                        warehouseItem.MinQuantity -= item.Quantity;
                        
                         context.SaveChanges();
                     }
@@ -132,7 +146,7 @@ namespace SalesManagmentSystem
             {
                 foreach (var item in saleItemsList)
                 {
-                    total += item.Quantity * item.SalePrice; // Учитываем наценку в расчетах
+                    total += item.Quantity * item.SalePrice; 
                 }
             }
 
@@ -441,6 +455,44 @@ namespace SalesManagmentSystem
                 CalculateTotalAmount();
             }
         }
+
+        private void cmbMainWarehouse_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            LoadWarehouseProducts();
+        }
+
+        private void LoadWarehouseProducts()
+        {
+            if (selectedWarehouse != null)
+            {
+                using (var context = new ModelStore())
+                {
+                    var products = context.Products
+                        .Join(context.Warehouses.Where(w => w.WarehouseID == selectedWarehouse.WarehouseID),
+                            p => p.ProductID,
+                            w => w.ProductID,
+                            (p, w) => new
+                            {
+                                p.Code,
+                                p.Name,
+                                MinQuantity = w.MinQuantity,
+                                MaxQuantity = w.MaxQuantity,
+                     
+                            }).ToList();
+
+                    gridWarehouseProducts.ItemsSource = products;
+                }
+            }
+        }
+
+
+        private void btnTransferToStore_Click(object sender, RoutedEventArgs e)
+        {
+            Console.WriteLine("В разработке :)");
+        }
+
+
+       
 
         private void cmbCustomer_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
